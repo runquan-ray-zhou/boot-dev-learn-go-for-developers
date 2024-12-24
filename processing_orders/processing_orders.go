@@ -19,6 +19,21 @@ package main
 
 func placeOrder(productID string, quantity int, accountBalance float64) (bool, float64) {
 	// ?
+	// Check if there is enough product instock
+	currentStock := amountInStock(productID)
+	if currentStock < quantity {
+		// not enough return false and balance
+		return false, accountBalance
+	}
+	// Check if there is enough money in account to place order
+	totalCost := calcPrice(productID, quantity)
+	if accountBalance < totalCost {
+		// not enough return false and balance
+		return false, accountBalance
+	}
+	// else return true and new balance
+	currentBalance := accountBalance - totalCost
+	return true, currentBalance
 }
 
 // Don't touch below this line
@@ -74,3 +89,20 @@ func amountInStock(productID string) int {
 		return 0
 	}
 }
+
+/*
+func placeOrder(productID string, quantity int, accountBalance float64) (bool, float64) {
+	availableStock := amountInStock(productID)
+	if quantity > availableStock {
+		return false, accountBalance
+	}
+
+	totalCost := calcPrice(productID, quantity)
+	if totalCost > accountBalance {
+		return false, accountBalance
+	}
+
+	remainingBalance := accountBalance - totalCost
+	return true, remainingBalance
+}
+*/
